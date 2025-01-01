@@ -11,7 +11,8 @@ public:
     std::string category;
     bool available;
 
-    Book(int id, std::string title, std::string author, std::string category);
+    Book(int id, std::string title, std::string author, std::string category)
+        : id(id), title(title), author(author), category(category), available(true) {}
 };
 
 #endif
