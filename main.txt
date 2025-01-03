@@ -4,6 +4,16 @@
           other things
 
 **/
+#include <bits/stdc++.h>
+#include  <Hashing.h>
+#include  <Book.h>
+#include  <User.h>
+#include <Admin.h>
+#include <BST.h>
+#include <Library_System.h>
+using namespace std;
+
+
 
 Node *BST::Root =NULL;
 
