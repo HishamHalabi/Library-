@@ -3,8 +3,8 @@ public :
     Admin () {
 
     }
-    Admin (string name  , int id) {
-        Person(name , id )  ;
+    Admin (string name  , int id) :Person(name, id) {
+
     }
 
     void display() {
@@ -13,13 +13,14 @@ public :
 
      friend ostream& operator<< (ostream &os  , Admin& A)  {
         os<<"Admin NAme  :  "<<  A.name <<" Admin ID :   "<<A.id <<"\n";
+        return os;
     }
 
 
     void add_book( unordered_map < int ,int,  custom_hash> &av ,
                    unordered_map < int , Book ,  custom_hash> &mp  ,
-                   unordered_map < int  , multiset < int > , custom_hash >  tag_Book,
-                   unordered_map < int  , multiset < int > , custom_hash >  cat_Book ,
+                   unordered_map < int  , multiset < int > , custom_hash >  &tag_Book,
+                   unordered_map < int  , multiset < int > , custom_hash > & cat_Book ,
                    Book &b
 
     )
@@ -38,8 +39,8 @@ public :
 
     void del_book( unordered_map < int , int ,  custom_hash> &av ,
                    unordered_map < int , Book ,  custom_hash> &mp  ,
-                   unordered_map < int  , multiset < int > , custom_hash >  tag_Book ,
-                   unordered_map < int  , multiset < int > , custom_hash >  cat_Book  ,
+                   unordered_map < int  , multiset < int > , custom_hash > & tag_Book ,
+                   unordered_map < int  , multiset < int > , custom_hash > & cat_Book  ,
                    Book &b
 
     )
@@ -58,3 +59,4 @@ public :
     }
 
 };
+
