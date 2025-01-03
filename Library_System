@@ -1,9 +1,12 @@
 class Library_System  { // books at each tag , books at each directory , BST
     Admin ad ;
     BST bs;
+
+
+
     set<string> CATS ;
     unordered_map < int , int  ,  custom_hash> available ;
-    unordered_map  < int , Book , custom_hash>  mp ; //for id what the book
+   //for id what the book
     vector <  vector < int >>   Year_Book ;
     unordered_map < int  , multiset < int > , custom_hash >  cat_Book  , tag_Book;
     multiset <pair < double , int >>  Books_rate;
@@ -48,9 +51,10 @@ class Library_System  { // books at each tag , books at each directory , BST
 
 
 public  :
+      unordered_map  < int , Book , custom_hash>  mp ;
 
-    Library_System (Admin Ad) {
-        this->ad  =  ad;
+    Library_System (Admin& Ad) {
+        this->ad  = Ad;
         Year_Book.resize(3000) ;
     }
 
@@ -163,7 +167,8 @@ public  :
 
     }
 
-    void borrow_book( Book &b) {
+    void borrow_book( Book &b, User& U) {
+        U.read_book(b);
         if (!available[b.getID()])  {
             return void (cout<<"not available \n") ;
         }
@@ -191,14 +196,18 @@ public  :
 
 
     void add_Book(int id  , Book &b)  {
+
         if (id!=ad.getID()) {
             cout<<" not allowed\n";
         }
+        available[b.getID()]  = 1 ;
         ad.add_book(available , mp ,tag_Book ,  cat_Book ,b) ;
         CATS.insert(b.getCat()) ;
+
     }
 
     void del_book(int id  , Book &b) {
+        available[b.getID()] = 0 ;
         if (id!=ad.getID()) {
             cout<<" not allowed \n";
         }
