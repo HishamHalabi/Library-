@@ -1,1 +1,152 @@
+Node *BST::Root =NULL;
+
+
+int main()
+{
+
+Book b("name" ,  22 ,22 ,"ss") ;
+
+     Admin ad("Hisham" ,2202267) ;
+     cout<<ad.getID()<<"\n";
+
+     vector <Book>  Books;
+
+     map < int,Book > cur ;
+
+
+     Book B1("DSU" , 10 , 2023, "data") ;
+     Book  B2("sort" , 17 , 2023, "algo") ;
+     Book B3("binary search"  , 2, 2024 , "tech") ;
+     Book B4("tarjan"  , 19 , 2024 , "algo");
+     Book B5("bla" ,30 , 2023 , "collegue") ;
+     Book B6("others"  , 11 , 2024 , "social");
+     Book B7("yaya" , 100 , 2023 , "social") ;
+
+     cur[10] = B1;
+     cur[17] = B2 ;
+     cur[2]  =B3 ;
+     cur[19] =B4;
+     cur[30]  =B5;
+     cur[11]  =B6 ;
+     cur[100] = B7;
+
+     B1.add_tags("CP") ;
+     B2.add_tags("CP") ;
+     B3.add_tags("CP") ;
+     B4.add_tags("CP") ;
+     B5.add_tags("University") ;
+     B6.add_tags("social") ;
+     B7.add_tags("social") ;
+
+
+     vector <User>  useres;
+     useres.push_back(User("Ahmed" , 22));
+     useres.push_back(User("Ahmed" , 23));
+
+
+     Library_System sy(ad) ;
+
+
+     function<void (User &) >   User_actions=[&](User &U) {
+                 cout<<"what do u want ? \n" ;
+                 cout<<"1 borrow  >> then enter id of Book \n " ;
+                 cout<<"2 return  >> then enter id of Book \n" ;
+                 cout<< "3 want suggest for Book \n" ;
+                 cout<<"4 check if Book with name exist and what id >>  enter name of Book \n";
+                 cout<<"5 see av Cats\n";
+                 cout<<"6 See content of categorey >> enter  name of cat \n";
+                 cout<<"7 Filter Books  according to [rate year prefix categ \n";
+                 cout<<"8 see content of some Book \n";
+
+                 int num ;
+                 cin >> num ;
+
+                 if (num==1)  {
+                          int id  ;
+                          cin >> id ;
+                          sy.borrow_book(sy.mp[id] , U)  ;
+
+                 }
+                 else if (num==2)  {
+                          int id;
+                          cin >> id;
+                          sy.return_book(sy.mp[id] ) ;
+                 }
+                 else if (num==3)  {
+                       sy.suggest_Book(U) ;
+                 }
+                 else if (num==4)  {
+                       string name ;
+                       cin >>  name;
+                         sy.findBook(name);
+
+                 }
+                 else if (num==5)  {
+                           sy.d_cats();
+                 }
+                 else if (num==6)  {
+                           string c ;
+                           cin >>c ;
+                           sy.display_cat(c)  ;
+                 }
+                 else if (num==7)  {
+                          sy.Filter() ;
+                 }
+                 else  {
+                         int id ;
+                         cin >> id ;
+                         (sy.mp[id]).display_content() ;
+                 }
+
+     };
+
+     function<void () >  Admin_actions = [&]() {
+                 cout<<"what do u want ? \n" ;
+                 cout<<"1 add >> then enter id of Book \n " ;
+                 cout<<"2 del >> then enter id of Book \n" ;
+                 int c;
+                 cin >>c  ;
+
+                 if (c==1) {
+                       int id ;
+                       cin >> id;
+
+
+                       sy.add_Book(ad.getID() ,cur[id])  ;
+                 }
+                 else  {
+                       int id  ;
+                       cin >> id ;
+                       sy.del_book(ad.getID() , cur[id])  ;
+                 }
+     } ;
+
+     while(true)  {
+             cout<<" Who are U ? 1.admin 2.user \n";
+             int type;
+             cin >> type ;
+
+             if (type ==2)  {
+                   int idx  , id;
+                   cout<<"enter your idx  id \n";
+                   cin >> idx >> id;
+                   if (useres[idx].getID()!=id) {
+                        cout<<"wrong data\n";
+                        continue ;
+                   }
+                   User_actions(useres[idx]) ;
+             }
+             else  {
+                   Admin_actions();
+             }
+
+               //   system("cls") ;
+
+     }
+
+
+
+
+    return 0;
+}
 
