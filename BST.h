@@ -1,3 +1,4 @@
+
 class Node  {
 
 public :
@@ -15,7 +16,7 @@ public :
     }
 
 
-    friend bool operator<(const Node nd1, const Node nd2) {
+    friend bool operator<(const Node& nd1, const  Node &nd2) {
         return nd1.name < nd2.name;
     }
 };
