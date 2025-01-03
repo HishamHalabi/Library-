@@ -1,0 +1,210 @@
+class Library_System  { // books at each tag , books at each directory , BST
+    Admin ad ;
+    BST bs;
+    set<string> CATS ;
+    unordered_map < int , int  ,  custom_hash> available ;
+    unordered_map  < int , Book , custom_hash>  mp ; //for id what the book
+    vector <  vector < int >>   Year_Book ;
+    unordered_map < int  , multiset < int > , custom_hash >  cat_Book  , tag_Book;
+    multiset <pair < double , int >>  Books_rate;
+    unordered_map<int, double  , custom_hash > cnt , rate ;
+
+
+
+
+
+    vector<int>  Filter_BOOKS_year(int fr , int to){
+        vector  <int> ret;
+        for (int i  = fr ; i <=to ; ++i) {
+            for (auto &id : Year_Book[i]) {
+                ret.push_back(id);
+            }
+        }
+
+        return ret;
+    }
+
+    vector<int>  Filter_BOOKS_prefix(string start){
+        if (start==""){
+            return vector<int> () ;
+        }
+        vector  <int> ret =  bs.BOOKS_start_with(start) ;
+        return ret;
+    }
+
+    vector < int > filter_by_rate(long double mnRate)  {
+        vector <int >  ids ;
+        for (auto &[c , vi]  :  cat_Book) {
+            for (auto &id :  vi) {
+                if (rate[id]  > mnRate) {
+                    ids.push_back(id) ;
+                }
+            }
+        }
+        return ids;
+    }
+
+
+
+
+public  :
+
+    Library_System (Admin Ad) {
+        this->ad  =  ad;
+        Year_Book.resize(3000) ;
+    }
+
+
+    // filter section
+
+
+    void findBook (string name) {
+        int id = bs.Find(name) ;
+        if (id==-1) {
+            return void (cout<<"not found\n");
+        }
+       cout<<mp[id] <<"  >> is found \n";
+    }
+
+    void d_cats() {
+            cout<<" categouries are  : " ;
+            for (auto &s :  CATS)  {
+                    cout<<s<<" | " ;
+            }
+            cout<<"\n";
+    }
+
+    void display_cat(string cat) {
+
+        cout<<cat <<"  content is : " ;
+        for (auto &id :  cat_Book[get_hash(cat)]) {
+            cout<<mp[id];
+        }
+        cout<<"\n";
+    }
+
+
+    void suggest_Book(User  &U) {
+
+        set<pair<int,string >  > in =  U.getInterests();
+        int cntr =  10 ;
+        for (auto& [cnt , tg]  :  in) {
+            int Hash = get_hash(tg) ;
+            for (auto &id  :  tag_Book[Hash]) {
+                Book &B = mp[id] ;
+                cout<<B ;
+                if ((--cntr) == 0)
+                    break ;
+            }
+            if (cntr==0) {
+                break ;
+            }
+        }
+
+        if (in.empty()) {
+
+                 for (auto &c :  CATS) {
+                            int Hash =  get_hash(c)  ;
+                            for (auto &id :  cat_Book[Hash]) {
+                                       Book &B = mp[id] ;
+                                        cout<<B ;
+                                        if ((--cntr) == 0)
+                                                  break ;
+                            }
+                            if (cntr==0){
+                                   break ;
+                            }
+                }
+        }
+
+        if (cntr==10) {
+            cout<<"wait for Updates\n";
+        }
+
+    }
+
+
+    void  Filter() {
+        int S_Year  =-1, E_Year=-1 ;
+        string pre ="",cat="";
+        long double mnRate=0 ;
+
+        cout<<"Enter start Year  end Year    prefix of Book name  cate  mnRate respectivley "<<"\n";
+        cin >> S_Year >> E_Year >> pre>>cat >> mnRate  ;
+
+        set<pair<long double    , int > >  ms ;
+        vector  <int > v  =  Filter_BOOKS_prefix(pre) ;
+        for (auto &i  : v)
+            ms.insert({-rate[i], i }) ;
+
+         v  =  Filter_BOOKS_year(S_Year , E_Year) ;
+        for (auto &i  : v)
+            ms.insert({-rate[i], i }) ;
+
+
+        v  =  filter_by_rate(mnRate) ;
+        for (auto &i  : v)
+            ms.insert({-rate[i], i }) ;
+
+        if (cat!="") {
+            int h =  get_hash(cat) ;
+            for (auto &i :  cat_Book[h]
+            )
+                ms.insert({-rate[i], i }) ;
+        }
+
+
+        cout<<" Results : ";
+        for (auto &[rt , i]  :  ms) {
+            cout<<mp[i]  ;
+        }
+
+
+
+    }
+
+    void borrow_book( Book &b) {
+        if (!available[b.getID()])  {
+            return void (cout<<"not available \n") ;
+        }
+
+        available[b.getID()] =  false;
+    }
+
+
+    void rate_book (Book &B , double rt)  {
+        int i =  B.getID() ;
+        if (Books_rate.find({rate[i] , i})!=Books_rate.end())
+                               Books_rate.erase(Books_rate.find({rate[i] , i})) ;
+        long double sum =   rate[i] *  cnt[i]   +  rt;      //hint : oldsum / cnt = old rate
+        Books_rate.insert({sum  / (++cnt[i]),  i }) ;
+    }
+
+    void return_book(Book &b) {
+        available[b.getID()] =  true ;
+        cout<<"  pls rate book from 5 \n";
+        double rt;
+        cin>> rt ;
+
+        rate_book(b  , rt) ;
+    }
+
+
+    void add_Book(int id  , Book &b)  {
+        if (id!=ad.getID()) {
+            cout<<" not allowed\n";
+        }
+        ad.add_book(available , mp ,tag_Book ,  cat_Book ,b) ;
+        CATS.insert(b.getCat()) ;
+    }
+
+    void del_book(int id  , Book &b) {
+        if (id!=ad.getID()) {
+            cout<<" not allowed \n";
+        }
+        ad.del_book(available , mp , tag_Book, cat_Book ,b) ;
+    }
+
+
+
+};
