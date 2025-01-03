@@ -1,19 +1,1 @@
-#include "Library.h"
 
-int main() {
-    Library library;
-    library.loadData();
-
-    library.addBook(1, "C++ Programming", "Bjarne Stroustrup", "Programming");
-    library.addBook(2, "Data Structures", "Thomas H. Cormen", "Programming");
-    library.addBook(3, "The Catcher in the Rye", "J.D. Salinger", "Literature");
-    library.addUser(1, "John Doe");
-    library.addUser(2, "Jane Smith");
-
-    library.borrowBook(1, 1);
-    library.searchBookByCategory("Programming");
-    library.printUserHistory(1);
-
-    library.saveData();
-    return 0;
-}
