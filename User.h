@@ -1,16 +1,16 @@
 
 class Person  {
 protected:
-    static  string  name   ;
-    static int id ;
+    string  name   ;
+     int id ;
 
 public :
 
     Person(){}
 
-    Person (string name , int id)  {
-        this->name =  name ;
-        this->id =  id ;
+    Person (string ame , int i)  {
+        name =  ame ;
+        id =  i ;
     }
 
     string getName ()  {
@@ -41,8 +41,8 @@ public :
     User () {
 
     }
-    User (string name  , int id) {
-        Person(name , id )  ;
+    User (string name  , int id) :Person(name,id){
+
     }
 
     set <pair < int , string > > getInterests (){
@@ -53,10 +53,6 @@ public :
         cout<<"User NAme  :  "<<name <<" USer ID :   "<<id<<"\n";
     }
 
-    friend ostream& operator<< (ostream &os  , User& U)  {
-        os<<"User NAme  :  "<< name <<" USer ID :   "<<id <<"\n";
-        return os;
-    }
 
     void History () {
         for (auto &b :   book_list) {
