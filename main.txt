@@ -1,3 +1,10 @@
+/**
+ we need exception handling to handle: 
+          sy.mp[i] >> not valid id 
+          other things
+
+**/
+
 Node *BST::Root =NULL;
 
 
